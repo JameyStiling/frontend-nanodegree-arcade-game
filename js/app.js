@@ -9,6 +9,8 @@ var Enemy = function() {
     this.x = 0;
     this.y = 50;
     this.speed = 60;
+    this.width = 101;
+    this.height = 171;
 };
 
 // Update the enemy's position, required method for game
@@ -26,9 +28,19 @@ Enemy.prototype.update = function(dt) {
         this.x = 0
     }
 
-//     //try to handle collision
-//     if (this.x === Player.x){
-// this.x = this.x - (this.speed*dt);
+
+//handle collision
+for (i = 0; i < 3; i++){
+if (allEnemies[i].x < player.x + player.width &&
+   allEnemies[i].x + allEnemies[i].width > player.x &&
+   allEnemies[i].y < player.y + player.height &&
+   allEnemies[i].height + allEnemies[i].y > player.y) {
+    // collision detected!
+    alert("you are dead");
+    player.x = 0;
+    player.y = 606-171;
+}
+}
 //     }
 };
 
@@ -47,8 +59,8 @@ var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 0;
     this.y = 606-171;
-
-
+    this.width = 101;
+    this.height = 171;
 };
 
 // Update the Player's position, required method for game
