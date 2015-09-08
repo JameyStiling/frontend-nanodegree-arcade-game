@@ -1,14 +1,14 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x,y,speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-    this.x = 0;
-    this.y = 50;
-    this.speed = 60;
+    this.sprite = 'images/shake.png';
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
     this.width = 101;
     this.height = 171;
 };
@@ -21,22 +21,26 @@ Enemy.prototype.update = function(dt) {
     // all computers.
 
     //This moves the bug to the right until it hits the edge of the screen where it starts again
-    if (this.x < 505){
-    this.x = this.x + (this.speed*dt);
-}
-    else if (this.x >= 505){
-        this.x = 0
+    for (var i = 0; i < allEnemies.length; i++) {
+        if (allEnemies[i].x < 505){
+        allEnemies[i].x = allEnemies[i].x + (allEnemies[i].speed*dt);
+        }
+//start at left and give random speed
+    else if (allEnemies[i].x >= 505){
+        allEnemies[i].x = -100;
+        allEnemies[i].speed = getRandomArbitrary(10,60);
+        }
     }
 
 
-//handle collision
+//handle collision.  need to compensate for background of images
 for (i = 0; i < 3; i++){
-if (allEnemies[i].x < player.x + player.width &&
-   allEnemies[i].x + allEnemies[i].width > player.x &&
-   allEnemies[i].y < player.y + player.height &&
-   allEnemies[i].height + allEnemies[i].y > player.y) {
+if (allEnemies[i].x < player.x + player.width-30 &&
+   allEnemies[i].x + allEnemies[i].width-30 > player.x &&
+   allEnemies[i].y < player.y + player.height-50 &&
+   allEnemies[i].height-50 + allEnemies[i].y > player.y) {
     // collision detected!
-    alert("you are dead");
+    alert("you now has a chubbeh berreh!!!");
     player.x = 0;
     player.y = 606-171;
 }
@@ -56,7 +60,7 @@ var Player = function() {
 
     // The image/sprite for our Player, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/snug.png';
     this.x = 0;
     this.y = 606-171;
     this.width = 101;
@@ -66,8 +70,9 @@ var Player = function() {
 // Update the Player's position, required method for game
 // Parameter: dt, a time delta between ticks
 Player.prototype.update = function(dt) {
-        if (this.y < 0){
+        if (this.y < 50){
     this.y = 606-171
+    alert("you don't has a chubbeh berreh snugs!!!!!");
 }
 };
 
@@ -99,8 +104,20 @@ else if (key == 'down'){
 // Place all enemy objects in an array called allEnemies
 var n = 3;
 var allEnemies = new Array();
-for (var i = 0; i < n; i++)
-    allEnemies.push(new Enemy());
+for (var i = 0; i < n; i++) {
+    var x = 0
+    var y = 50 + i*75
+    var speed = getRandomArbitrary(20,60)
+    allEnemies.push(new Enemy(x,y,speed));
+    }
+
+// Returns a random number between min (inclusive) and max (exclusive)
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+
+
 // Place the player object in a variable called player
 var player = new Player();
 
