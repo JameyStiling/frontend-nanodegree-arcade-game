@@ -6,8 +6,9 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = 100;
+    this.x = 0;
     this.y = 50;
+    this.speed = 60;
 };
 
 // Update the enemy's position, required method for game
@@ -16,6 +17,19 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+
+    //This moves the bug to the right until it hits the edge of the screen where it starts again
+    if (this.x < 505){
+    this.x = this.x + (this.speed*dt);
+}
+    else if (this.x >= 505){
+        this.x = 0
+    }
+
+//     //try to handle collision
+//     if (this.x === Player.x){
+// this.x = this.x - (this.speed*dt);
+//     }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -31,29 +45,47 @@ var Player = function() {
     // The image/sprite for our Player, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
-    this.x = 200;
-    this.y = 400;
+    this.x = 0;
+    this.y = 606-171;
+
+
 };
 
 // Update the Player's position, required method for game
 // Parameter: dt, a time delta between ticks
 Player.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+        if (this.y < 0){
+    this.y = 606-171
+}
 };
 
 // Draw the enemy on the screen, required method for game
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-// This class requires an update(), render() and
-// a handleInput() method.
+
+//
+// a handleInput() method needed for player.
+Player.prototype.handleInput = function(key){
+
+if (key == 'left' && this.x > 0) {
+    this.x = this.x -(10);
+}
+else if (key == 'up'){
+    this.y = this.y - (10);
+}
+else if (key == 'right' && this.x < 404){
+    this.x = this.x + (10);
+}
+else if (key == 'down'){
+    this.y = this.y + (10);
+}
+}
 
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-var n = 1;
+var n = 3;
 var allEnemies = new Array();
 for (var i = 0; i < n; i++)
     allEnemies.push(new Enemy());
