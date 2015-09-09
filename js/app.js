@@ -83,6 +83,22 @@ Player.prototype.render = function() {
 
 //
 // a handleInput() method needed for player.
+Player.prototype.handlePS4controller = function(left,right,up,down){
+
+if (left == true && this.x > 0) {
+    this.x = this.x -(10);
+}
+else if (up == true){
+    this.y = this.y - (10);
+}
+else if (right == true && this.x < 404){
+    this.x = this.x + (10);
+}
+else if (down == true){
+    this.y = this.y + (10);
+}
+}
+
 Player.prototype.handleInput = function(key){
 
 if (key == 'left' && this.x > 0) {
@@ -134,3 +150,79 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+
+var hasGP = false;
+    var repGP;
+
+    function canGame() {
+        return "getGamepads" in navigator;
+    }
+
+var input = {
+                left: false,
+                right: false,
+                up: false,
+                down: false
+            }
+    $(document).ready(function() {
+
+        if(canGame()) {
+
+            var prompt = "To begin using your gamepad, connect it and press any button!";
+            $("#gamepadPrompt").text(prompt);
+
+            $(window).on("gamepadconnected", function() {
+                hasGP = true;
+                $("#gamepadPrompt").html("Gamepad connected!");
+                console.log("connection event");
+                repGP = window.setInterval(reportOnGamepad,100);
+            });
+
+            $(window).on("gamepaddisconnected", function() {
+                console.log("disconnection event");
+                $("#gamepadPrompt").text(prompt);
+                window.clearInterval(repGP);
+            });
+
+            //setup an interval for Chrome
+            var checkGP = window.setInterval(function() {
+                console.log('checkGP');
+                if(navigator.getGamepads()[0]) {
+                    if(!hasGP) $(window).trigger("gamepadconnected");
+                    window.clearInterval(checkGP);
+                }
+            }, 500);
+        }
+
+    });
+
+    function reportOnGamepad() {
+        var gp = navigator.getGamepads()[0];
+
+        var axeLF = gp.axes[0];
+        var axeud = gp.axes[1];
+                    if(axeLF < -0.5) {
+                        input.left = true;
+                        input.right = false;
+                    } else if(axeLF > 0.5) {
+                        input.left = false;
+                        input.right = true;
+                    } else {
+                        input.left = false;
+                        input.right = false;
+                    }
+                    if(axeud < -0.5) {
+                        input.up = true;
+                        input.down = false;
+                    } else if(axeud > 0.5) {
+                        input.up = false;
+                        input.down = true;
+                    } else {
+                        input.up = false;
+                        input.down = false;
+                    }
+
+         player.handlePS4controller(input.left,input.right,input.up,input.down);
+    }
+
