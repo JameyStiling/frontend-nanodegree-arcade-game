@@ -202,8 +202,7 @@ $(document).ready(function() {
 
 });
 
-// some of the gamepad code derived from the awesome tutsplus tutorial
-//http://gamedevelopment.tutsplus.com/tutorials/using-the-html5-gamepad-api-to-add-controller-support-to-browser-games--cms-21345
+// some of the gamepad code derived from the awesome tuts+ GamePad API tutorial
 
     function reportOnGamepad() {
         var gp = navigator.getGamepads()[0];
