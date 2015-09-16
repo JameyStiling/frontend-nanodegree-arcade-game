@@ -1,6 +1,10 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+Please open index.html to run the game.
 
-for self-checking their submission.
+The goal of the game is to navigate the player to the water without being eaten by a bug.
+
+The user can use either the arrow keys on the keyboard or a PS4 controller (left stick).
+
+More functionality coming soon!!!
