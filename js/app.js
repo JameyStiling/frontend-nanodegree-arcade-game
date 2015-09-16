@@ -5,7 +5,7 @@ var Enemy = function(x,y,speed) {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/shake.png';
+    this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
     this.speed = speed;
@@ -25,24 +25,30 @@ Enemy.prototype.update = function(dt) {
         if (allEnemies[i].x < 505){
         allEnemies[i].x = allEnemies[i].x + (allEnemies[i].speed*dt);
         }
+
 //start at left and give random speed
     else if (allEnemies[i].x >= 505){
         allEnemies[i].x = -100;
-        allEnemies[i].speed = getRandomArbitrary(10,60);
+        allEnemies[i].speed = getRandomArbitrary(60,120);
         }
     }
 
 
-//handle collision.  need to compensate for background of images
+//handle collision.  need to compensate for background space of images
 for (i = 0; i < 3; i++){
-if (allEnemies[i].x < player.x + player.width-30 &&
-   allEnemies[i].x + allEnemies[i].width-30 > player.x &&
-   allEnemies[i].y < player.y + player.height-50 &&
-   allEnemies[i].height-50 + allEnemies[i].y > player.y) {
+if (allEnemies[i].x < player.x + player.width-15 &&
+   allEnemies[i].x + allEnemies[i].width-15 > player.x &&
+   allEnemies[i].y < player.y + player.height-90 &&
+   allEnemies[i].height-90 + allEnemies[i].y > player.y) {
+
     // collision detected!
-    alert("you now has a chubbeh berreh!!!");
-    player.x = 0;
+    //.1 seconds to delay the game reset after death
+
+setTimeout(function(){
+    player.x = 200;
     player.y = 606-171;
+}, 100);
+
 }
 }
 //     }
@@ -60,8 +66,8 @@ var Player = function() {
 
     // The image/sprite for our Player, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/snug.png';
-    this.x = 0;
+    this.sprite = 'images/char-boy.png';
+    this.x = 200;
     this.y = 606-171;
     this.width = 101;
     this.height = 171;
@@ -70,9 +76,10 @@ var Player = function() {
 // Update the Player's position, required method for game
 // Parameter: dt, a time delta between ticks
 Player.prototype.update = function(dt) {
-        if (this.y < 50){
-    this.y = 606-171
-    alert("you don't has a chubbeh berreh snugs!!!!!");
+        if (this.y < -10){
+            player.x = 200;
+            this.y = 606-171
+    alert("You win!!!!!");
 }
 };
 
@@ -86,44 +93,45 @@ Player.prototype.render = function() {
 Player.prototype.handlePS4controller = function(left,right,up,down){
 
 if (left == true && this.x > 0) {
-    this.x = this.x -(10);
+    this.x = this.x -(50);
 }
 else if (up == true){
-    this.y = this.y - (10);
+    this.y = this.y - (50);
 }
 else if (right == true && this.x < 404){
-    this.x = this.x + (10);
+    this.x = this.x + (50);
 }
 else if (down == true){
-    this.y = this.y + (10);
+    this.y = this.y + (50);
 }
 }
 
 Player.prototype.handleInput = function(key){
 
 if (key == 'left' && this.x > 0) {
-    this.x = this.x -(10);
+    this.x = this.x -(50);
 }
 else if (key == 'up'){
-    this.y = this.y - (10);
+    this.y = this.y - (50);
 }
 else if (key == 'right' && this.x < 404){
-    this.x = this.x + (10);
+    this.x = this.x + (50);
 }
 else if (key == 'down'){
-    this.y = this.y + (10);
+    this.y = this.y + (50);
 }
 }
 
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
+// Use random number generator to give enemies unpredictable speed
 var n = 3;
 var allEnemies = new Array();
 for (var i = 0; i < n; i++) {
     var x = 0
     var y = 50 + i*75
-    var speed = getRandomArbitrary(20,60)
+    var speed = getRandomArbitrary(50,100)
     allEnemies.push(new Enemy(x,y,speed));
     }
 
@@ -169,12 +177,12 @@ var input = {
 
         if(canGame()) {
 
-            var prompt = "To begin using your gamepad, connect it and press any button!";
+            var prompt = "To begin using your PS4 Controller, connect it and press any button!";
             $("#gamepadPrompt").text(prompt);
 
             $(window).on("gamepadconnected", function() {
                 hasGP = true;
-                $("#gamepadPrompt").html("Gamepad connected!");
+                $("#gamepadPrompt").html("Controller connected!");
                 console.log("connection event");
                 repGP = window.setInterval(reportOnGamepad,100);
             });
@@ -201,6 +209,7 @@ var input = {
         var gp = navigator.getGamepads()[0];
 
         var axeLF = gp.axes[0];
+
         var axeud = gp.axes[1];
                     if(axeLF < -0.5) {
                         input.left = true;
