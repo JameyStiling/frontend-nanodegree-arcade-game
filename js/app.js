@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-var Enemy = function(x,y,speed) {
+var Enemy = function(x, y, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -22,13 +22,14 @@ Enemy.prototype.update = function(dt) {
     // all computers.
 
     //This moves the bug to the right until it hits the edge of the screen where it starts again
+    var sideScreen = 505;
     for (var i = 0; i < allEnemies.length; i++) {
-        if (allEnemies[i].x < 505){
+        if (allEnemies[i].x < sideScreen){
             allEnemies[i].x = allEnemies[i].x + (allEnemies[i].speed*dt);
         }
 
     //start at left and give random speed
-    else if (allEnemies[i].x >= 505){
+    else if (allEnemies[i].x >= sideScreen){
         allEnemies[i].x = -100;
         allEnemies[i].speed = getRandomNum(60,120);
         }
@@ -74,7 +75,7 @@ var Player = function() {
 Player.prototype.update = function(dt) {
         if (this.y < -10){
             player.x = 200;
-            this.y = 606-171;
+            this.y = 435;
         alert("You win!!!!!");
 }
 };
@@ -84,10 +85,10 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// a handleInput() methods needed for player.
+// handleInput() methods needed for player.
 
 //for PS4 contoller
-Player.prototype.handlePS4controller = function(left,right,up,down){
+Player.prototype.handlePS4controller = function(left, right, up, down){
 
     if (left == true && this.x > 0) {
         this.x = this.x -(50);
@@ -95,13 +96,13 @@ Player.prototype.handlePS4controller = function(left,right,up,down){
     else if (up == true) {
         this.y = this.y - (50);
     }
-    else if (right == true && this.x < 404) {
+    else if (right == true && this.x < 354) {
         this.x = this.x + (50);
     }
-    else if (down == true) {
+    else if (down == true && this.y < 435) {
         this.y = this.y + (50);
     }
-}
+};
 
 //for keyboard input
 Player.prototype.handleInput = function(key){
@@ -109,16 +110,16 @@ Player.prototype.handleInput = function(key){
     if (key == 'left' && this.x > 0) {
         this.x = this.x -(50);
     }
-    else if (key == 'up'){
+    else if (key == 'up') {
         this.y = this.y - (50);
     }
-    else if (key == 'right' && this.x < 404){
+    else if (key == 'right' && this.x < 354) {
         this.x = this.x + (50);
     }
-    else if (key == 'down'){
+    else if (key == 'down' && this.y < 435) {
         this.y = this.y + (50);
     }
-}
+};
 
 
 // Now instantiate your objects.
@@ -128,7 +129,7 @@ var n = 3;
 var allEnemies = [];
 for (var i = 0; i < n; i++) {
     var x = 0
-    var y = 50 + i*75
+    var y = 50 + i * 75
     var speed = getRandomNum(50,100)
     allEnemies.push(new Enemy(x,y,speed));
     }
@@ -229,6 +230,6 @@ $(document).ready(function() {
                         input.down = false;
                     }
 
-         player.handlePS4controller(input.left,input.right,input.up,input.down);
+         player.handlePS4controller(input.left, input.right, input.up, input.down);
     }
 
