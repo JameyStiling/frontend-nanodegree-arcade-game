@@ -23,25 +23,26 @@ Enemy.prototype.update = function(dt) {
 
     //This moves the bug to the right until it hits the edge of the screen where it starts again
     var sideScreen = 505;
-    for (var i = 0; i < allEnemies.length; i++) {
-        if (allEnemies[i].x < sideScreen){
-            allEnemies[i].x = allEnemies[i].x + (allEnemies[i].speed*dt);
+        if (this.x < sideScreen){
+            this.x = this.x + (this.speed*dt);
         }
 
     //start at left and give random speed
-    else if (allEnemies[i].x >= sideScreen){
-        allEnemies[i].x = -100;
-        allEnemies[i].speed = getRandomNum(60,120);
+    else if (this.x >= sideScreen){
+        this.x = -100;
+        this.speed = getRandomNum(60,120);
         }
-    }
+    //check for collisions
+    this.checkCollision();
 
+};
 
-//handle collision.  need to compensate for background space of images
-for (i = 0; i < 3; i++){
-    if (allEnemies[i].x < player.x + player.width-15 &&
-        allEnemies[i].x + allEnemies[i].width-15 > player.x &&
-        allEnemies[i].y < player.y + player.height-90 &&
-        allEnemies[i].height-90 + allEnemies[i].y > player.y) {
+//function to handle collisions.  need to compensate for background space of images
+Enemy.prototype.checkCollision = function() {
+    if (this.x < player.x + player.width-15 &&
+        this.x + this.width-15 > player.x &&
+        this.y < player.y + player.height-90 &&
+        this.height-90 + this.y > player.y) {
             // collision detected! 0.1 seconds to delay the game for reset after death
             setTimeout(function(){
                 player.x = 200;
@@ -49,8 +50,6 @@ for (i = 0; i < 3; i++){
             }, 100);
         }
 }
-//     }
-};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -64,14 +63,19 @@ var Player = function() {
     // The image/sprite for our Player, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
+
+    //starting position for player
     this.x = 200;
-    this.y = 606-171;
+    this.y = 435;
+
+    //size of player graphic
     this.width = 101;
     this.height = 171;
 };
 
 // Update the Player's position, required method for game
 // Parameter: dt, a time delta between ticks
+//if the player reaches the water then return to starting position
 Player.prototype.update = function(dt) {
         if (this.y < -10){
             player.x = 200;
@@ -130,7 +134,7 @@ var allEnemies = [];
 for (var i = 0; i < n; i++) {
     var x = 0
     var y = 50 + i * 75
-    var speed = getRandomNum(50,100)
+    var speed = getRandomNum(60,120)
     allEnemies.push(new Enemy(x,y,speed));
     }
 
